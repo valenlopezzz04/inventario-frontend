@@ -1,25 +1,23 @@
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 30000 // Mantén este timeout
+mongoose.connect('mongodb+srv://valejalopez444:valentina@gestioninventario.o72zu.mongodb.net/?retryWrites=true&w=majority&appName=GestionInventario', { 
+    useNewUrlParser: true, 
+    useUnifiedTopology: true 
 })
-.then(() => console.log("Conectado a MongoDB Atlas"))
-.catch((error) => console.error("Error conectando a MongoDB:", error));
+    .then(() => console.log("Conectado a MongoDB Atlas"))
+    .catch((error) => console.error("Error conectando a MongoDB:", error));
 
 app.use(express.json());
 
 const productosRouter = require('./routes/productos');
-app.use('/api/productos', productosRouter);
+app.use('/gestion/productos', productosRouter);
 
 app.get('/', (req, res) => {
-    res.send('API de Gestión de Inventario');
+    res.send('Prueba');
 });
 
 app.listen(PORT, () => {

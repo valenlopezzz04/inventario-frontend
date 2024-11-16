@@ -28,7 +28,8 @@ router.get('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         // Convierte el id a ObjectId
-        const id = mongoose.Types.ObjectId(req.params.id.trim());
+        const id = new mongoose.Types.ObjectId(req.params.id.trim());
+
 
         const productoActualizado = await Producto.findByIdAndUpdate(id, req.body, { new: true });
         if (!productoActualizado) {
