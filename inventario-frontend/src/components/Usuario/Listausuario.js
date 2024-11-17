@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../Config/axiosConfig'; // Asegúrate de usar tu configuración de Axios
 import {
   Box,
   Paper,
@@ -12,7 +12,6 @@ import {
   TableRow,
   Button,
 } from '@mui/material';
-import Navbar from '../Navbar';
 import Sidebar from '../Sidebar';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,12 +24,13 @@ function ListaUsuarios() {
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/gestion/usuarios', {
+        const response = await axios.get('/gestion/usuarios', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
         setUsuarios(response.data);
+        setMensaje('');
       } catch (error) {
         console.error('Error al cargar los usuarios:', error);
         setMensaje('No se pudo cargar la lista de usuarios.');
@@ -43,7 +43,7 @@ function ListaUsuarios() {
   // Eliminar un usuario
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/gestion/usuarios/${id}`, {
+      await axios.delete(`/gestion/usuarios/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -61,36 +61,35 @@ function ListaUsuarios() {
       {/* Sidebar */}
       <Sidebar />
 
-      {/* Contenido principal */}
-      <Box sx={{ flexGrow: 1, p: 3 }}>
-        {/* Navbar */}
-        <Navbar />
+      {/* Encabezado */}
+      <Typography variant="h4" gutterBottom>
+        Gestión de Usuarios
+      </Typography>
 
-        {/* Encabezado */}
-        <Typography variant="h4" gutterBottom>
-          Gestión de Usuarios
+      {/* Mensaje de confirmación */}
+      {mensaje && (
+        <Typography
+          variant="body1"
+          sx={{ color: mensaje.includes('éxito') ? 'green' : 'red', mb: 2 }}
+        >
+          {mensaje}
         </Typography>
+      )}
 
-        {/* Mensaje de confirmación */}
-        {mensaje && (
-          <Typography variant="body1" sx={{ color: mensaje.includes('éxito') ? 'green' : 'red', mb: 2 }}>
-            {mensaje}
-          </Typography>
-        )}
-
-        {/* Tabla de Usuarios */}
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell><strong>Nombre</strong></TableCell>
-                <TableCell><strong>Email</strong></TableCell>
-                <TableCell><strong>Rol</strong></TableCell>
-                <TableCell><strong>Acciones</strong></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {usuarios.map((usuario) => (
+      {/* Tabla de Usuarios */}
+      <TableContainer component={Paper} sx={{ mt: 2 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell><strong>Nombre</strong></TableCell>
+              <TableCell><strong>Email</strong></TableCell>
+              <TableCell><strong>Rol</strong></TableCell>
+              <TableCell><strong>Acciones</strong></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {usuarios.length > 0 ? (
+              usuarios.map((usuario) => (
                 <TableRow key={usuario._id}>
                   <TableCell>{usuario.nombre}</TableCell>
                   <TableCell>{usuario.email}</TableCell>
@@ -113,11 +112,17 @@ function ListaUsuarios() {
                     </Button>
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={4} align="center">
+                  No hay usuarios registrados.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Box>
   );
 }

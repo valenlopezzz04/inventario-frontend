@@ -1,163 +1,237 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Box,
   Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
-  TextField,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   Button,
-  MenuItem,
-  Grid,
+  TextField,
 } from '@mui/material';
-
-import Sidebar from '../Sidebar';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function EditarProducto() {
-  const { id } = useParams(); // Obtener el ID del producto desde la URL
-  const navigate = useNavigate();
+  const [productos, setProductos] = useState([]);
+  const [selectedProducto, setSelectedProducto] = useState(null); // Producto seleccionado para editar
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [open, setOpen] = useState(false); // Controlar apertura del popup
 
-  const [form, setForm] = useState({
-    nombre_producto: '',
-    cantidad: '',
-    ubicacion_almacen: '',
-    estado: 'Disponible',
-    categoria: '',
-  });
-
-  const [mensaje, setMensaje] = useState('');
-
-  // Cargar los datos del producto
+  // Cargar productos desde el backend
   useEffect(() => {
-    const fetchProducto = async () => {
+    const fetchProductos = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/gestion/productos/${id}`, {
+        const response = await axios.get('http://localhost:3001/gestion/productos', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-        setForm(response.data);
+        setProductos(response.data);
       } catch (error) {
-        console.error('Error al cargar el producto:', error);
-        setMensaje('No se pudo cargar el producto.');
+        console.error('Error al cargar los productos:', error);
+        setError('Error al cargar los productos.');
       }
     };
 
-    fetchProducto();
-  }, [id]);
+    fetchProductos();
+  }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
+  // Manejar edición de un producto
+  const handleEdit = (producto) => {
+    setSelectedProducto(producto);
+    setOpen(true); // Abrir popup
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Manejar guardado del producto editado
+  const handleSave = async () => {
     try {
       await axios.put(
-        `http://localhost:3001/gestion/productos/${id}`,
-        form,
+        `http://localhost:3001/gestion/productos/${selectedProducto._id}`,
+        selectedProducto,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         }
       );
-      setMensaje('Producto actualizado con éxito.');
-      setTimeout(() => navigate('/productos'), 2000); // Redirige después de 2 segundos
-    } catch (error) {
-      console.error('Error al actualizar el producto:', error);
-      setMensaje('Hubo un error al actualizar el producto.');
+      setSuccess('Producto actualizado con éxito.');
+      setError('');
+      setOpen(false); // Cerrar popup
+
+      // Actualizar la lista de productos
+      setProductos((prevProductos) =>
+        prevProductos.map((producto) =>
+          producto._id === selectedProducto._id ? selectedProducto : producto
+        )
+      );
+    } catch (err) {
+      console.error('Error al actualizar el producto:', err);
+      setError('Error al actualizar el producto.');
     }
   };
 
+  // Manejar eliminación de un producto
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3001/gestion/productos/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      setProductos((prevProductos) =>
+        prevProductos.filter((producto) => producto._id !== id)
+      );
+      setSuccess('Producto eliminado con éxito.');
+      setError('');
+    } catch (err) {
+      console.error('Error al eliminar el producto:', err);
+      setError('Error al eliminar el producto.');
+    }
+  };
+
+  // Manejar cambios en los campos del formulario de edición
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedProducto((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   return (
-    <Box sx={{ display: 'flex' }}>
-      {/* Sidebar */}
-      <Sidebar />
-        
-        {/* Encabezado */}
-        <Typography variant="h4" gutterBottom>
-          Editar Producto
-        </Typography>
-
-        {/* Formulario */}
-        <Paper elevation={3} sx={{ p: 3 }}>
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Nombre del Producto"
-                  name="nombre_producto"
-                  value={form.nombre_producto}
-                  onChange={handleChange}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  type="number"
-                  label="Cantidad"
-                  name="cantidad"
-                  value={form.cantidad}
-                  onChange={handleChange}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Ubicación en el Almacén"
-                  name="ubicacion_almacen"
-                  value={form.ubicacion_almacen}
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  select
-                  label="Estado"
-                  name="estado"
-                  value={form.estado}
-                  onChange={handleChange}
-                >
-                  <MenuItem value="Disponible">Disponible</MenuItem>
-                  <MenuItem value="No disponible">No disponible</MenuItem>
-                </TextField>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Categoría"
-                  name="categoria"
-                  value={form.categoria}
-                  onChange={handleChange}
-                />
-              </Grid>
-            </Grid>
-            <Box sx={{ mt: 3 }}>
-              <Button type="submit" variant="contained" color="primary">
-                Guardar Cambios
-              </Button>
-            </Box>
-          </form>
-        </Paper>
-
-        {/* Mensaje de confirmación */}
-        {mensaje && (
-          <Typography variant="body1" sx={{ mt: 2, color: mensaje.includes('éxito') ? 'green' : 'red' }}>
-            {mensaje}
+    <Box sx={{ padding: '20px', marginLeft: '240px' }}>
+      <Typography variant="h4" gutterBottom>
+        Editar Productos
+      </Typography>
+      <Paper elevation={3} sx={{ p: 3 }}>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell><strong>Nombre</strong></TableCell>
+                <TableCell><strong>Cantidad</strong></TableCell>
+                <TableCell><strong>Ubicación</strong></TableCell>
+                <TableCell><strong>Estado</strong></TableCell>
+                <TableCell><strong>Categoría</strong></TableCell>
+                <TableCell><strong>Acciones</strong></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {productos.map((producto) => (
+                <TableRow key={producto._id}>
+                  <TableCell>{producto.nombre_producto}</TableCell>
+                  <TableCell>{producto.cantidad}</TableCell>
+                  <TableCell>{producto.ubicacion_almacen}</TableCell>
+                  <TableCell>{producto.estado}</TableCell>
+                  <TableCell>{producto.categoria}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleEdit(producto)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      color="secondary"
+                      onClick={() => handleDelete(producto._id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {productos.length === 0 && (
+          <Typography
+            variant="body1"
+            sx={{ mt: 2, textAlign: 'center', color: 'gray' }}
+          >
+            No hay productos disponibles en el inventario.
           </Typography>
         )}
-      </Box>
+      </Paper>
 
-      )
+      {/* Popup de edición */}
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Editar Producto</DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Nombre del Producto"
+            name="nombre_producto"
+            value={selectedProducto?.nombre_producto || ''}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Cantidad"
+            name="cantidad"
+            type="number"
+            value={selectedProducto?.cantidad || ''}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Ubicación en el Almacén"
+            name="ubicacion_almacen"
+            value={selectedProducto?.ubicacion_almacen || ''}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Estado"
+            name="estado"
+            value={selectedProducto?.estado || ''}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Categoría"
+            name="categoria"
+            value={selectedProducto?.categoria || ''}
+            onChange={handleChange}
+            required
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSave} color="primary" variant="contained">
+            Guardar
+          </Button>
+          <Button onClick={() => setOpen(false)} color="secondary" variant="outlined">
+            Cancelar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Mensajes */}
+      {success && <Typography color="success.main">{success}</Typography>}
+      {error && <Typography color="error.main">{error}</Typography>}
+    </Box>
+  );
 }
 
 export default EditarProducto;
+
+

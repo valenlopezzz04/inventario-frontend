@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Box } from '@mui/material';
-import axios from '../../Config/axiosConfig'; // Importamos la configuración de Axios
+import { TextField, Button, Typography, Box, Alert } from '@mui/material';
+import axios from '../../Config/axiosConfig';
 
 function CrearProductos() {
   const [nombre, setNombre] = useState('');
   const [cantidad, setCantidad] = useState('');
   const [ubicacion, setUbicacion] = useState('');
-  const [estado, setEstado] = useState('Disponible'); // Por defecto, 'Disponible'
+  const [estado, setEstado] = useState('Disponible');
   const [categoria, setCategoria] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -14,16 +14,23 @@ function CrearProductos() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Enviar datos al backend
-      const response = await axios.post('/gestion/productos', {
-        nombre_producto: nombre,
-        cantidad: parseInt(cantidad), // Aseguramos que la cantidad sea un número
-        ubicacion_almacen: ubicacion,
-        estado,
-        categoria,
-      });
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        '/gestion/productos',
+        {
+          nombre_producto: nombre,
+          cantidad: parseInt(cantidad),
+          ubicacion_almacen: ubicacion,
+          estado,
+          categoria,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      // Mostrar mensaje de éxito
       setSuccess('Producto creado con éxito');
       setError('');
       setNombre('');
@@ -37,11 +44,20 @@ function CrearProductos() {
   };
 
   return (
-    <Box sx={{ p: 4 }}>
+    <Box
+      sx={{
+        maxWidth: '600px',
+        margin: 'auto',
+        p: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
       <Typography variant="h4" gutterBottom>
         Crear Producto
       </Typography>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{ width: '100%' }}>
         <TextField
           fullWidth
           margin="normal"
@@ -75,19 +91,13 @@ function CrearProductos() {
           onChange={(e) => setCategoria(e.target.value)}
           required
         />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          sx={{ mt: 2 }}
-        >
+        <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
           Crear Producto
         </Button>
       </form>
 
-      {/* Mensajes de éxito o error */}
-      {success && <Typography color="success.main">{success}</Typography>}
-      {error && <Typography color="error.main">{error}</Typography>}
+      {success && <Alert severity="success" sx={{ mt: 2 }}>{success}</Alert>}
+      {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
     </Box>
   );
 }

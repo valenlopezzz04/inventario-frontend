@@ -8,6 +8,29 @@ const bcrypt = require('bcrypt');
 
 const JWT_SECRET = 'valentina';
 
+// Middleware para verificar el token y el rol de admin
+const verificarToken = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ message: 'Token no proporcionado.' });
+    }
+
+    const token = authHeader.split(' ')[1];
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (error) {
+        return res.status(403).json({ message: 'Token no válido.' });
+    }
+};
+
+const verificarAdmin = (req, res, next) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Acceso denegado. Se requiere rol de administrador.' });
+    }
+    next();
+};
 
 // Registro de usuario
 router.post('/register', [
@@ -27,11 +50,12 @@ router.post('/register', [
         if (usuarioExistente) {
             return res.status(400).json({ message: 'El usuario ya existe.' });
         }
-        
-        // Crea el usuario con el rol especificado o con rol 'standard' por defecto
-        const usuario = new Usuario({ nombre, email, password, role: role || 'standard' });
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const usuario = new Usuario({ nombre, email, password: hashedPassword, role: role || 'standard' });
         await usuario.save();
-        
+
         res.status(201).json({ message: 'Usuario registrado con éxito.' });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -55,7 +79,6 @@ router.post('/login', [
             return res.status(400).json({ message: 'Credenciales incorrectas.' });
         }
 
-        // Genera el token con el rol del usuario incluido
         const token = jwt.sign({ userId: usuario._id, role: usuario.role }, JWT_SECRET, { expiresIn: '1h' });
         res.json({ token });
     } catch (error) {
@@ -63,6 +86,14 @@ router.post('/login', [
     }
 });
 
+// Endpoint para obtener la lista de usuarios
+router.get('/usuarios', verificarToken, verificarAdmin, async (req, res) => {
+    try {
+        const usuarios = await Usuario.find({}, 'nombre email role'); // Campos que deseas enviar
+        res.json(usuarios);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 module.exports = router;
-
-
