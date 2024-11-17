@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, Paper, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../Config/axiosConfig';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -11,11 +11,13 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await axios.post('http://localhost:3001/auth/login', { email, password });
+      const response = await axios.post('/auth/login', { email, password });
       const token = response.data.token;
-      localStorage.setItem('token', token); // Guardar el token en localStorage
-      navigate('/'); // Redirigir al Dashboard después de iniciar sesión
+
+      localStorage.setItem('token', token); // Guarda el token
+      navigate('/'); // Redirige al Dashboard
     } catch (err) {
       setError('Credenciales incorrectas. Inténtalo nuevamente.');
     }
@@ -23,14 +25,13 @@ function Login() {
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
-      {/* Fondo degradado */}
       <Grid
         item
         xs={false}
         sm={4}
         md={7}
         sx={{
-          background: 'linear-gradient(to bottom, #1e3c72, #2a5298)', // Degradado interactivo
+          background: 'linear-gradient(to bottom, #1e3c72, #2a5298)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -46,17 +47,8 @@ function Login() {
           </Typography>
         </Box>
       </Grid>
-      {/* Formulario del Login */}
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <Box
-          sx={{
-            my: 8,
-            mx: 4,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
+        <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography component="h1" variant="h5">
             Inicia sesión para continuar
           </Typography>
@@ -106,23 +98,6 @@ function Login() {
               Iniciar Sesión
             </Button>
           </form>
-          {/* Botón de registro */}
-          <Button
-            fullWidth
-            variant="outlined"
-            sx={{
-              mt: 1,
-              borderColor: '#1976d2',
-              color: '#1976d2',
-              '&:hover': {
-                borderColor: '#115293',
-                color: '#115293',
-              },
-            }}
-            onClick={() => navigate('/register')} // Redirige al formulario de registro
-          >
-            Crear una cuenta
-          </Button>
         </Box>
       </Grid>
     </Grid>
@@ -130,4 +105,3 @@ function Login() {
 }
 
 export default Login;
-

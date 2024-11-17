@@ -1,14 +1,21 @@
+const cors = require('cors'); // Asegúrate de importar cors
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const authRouter = require('./routes/auth');
 const productosRouter = require('./routes/productos');
-const {authMiddleware,verificarRol} = require('./middlewares/authMiddleware');
+const { authMiddleware, verificarRol } = require('./middlewares/authMiddleware');
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Configurar CORS
+app.use(cors({
+    origin: 'http://localhost:3000', // Permitir solicitudes desde el frontend (React)
+    credentials: true, // Permitir cookies y headers personalizados
+}));
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://valejalopez444:valentina@gestioninventario.o72zu.mongodb.net/?retryWrites=true&w=majority&appName=GestionInventario', { 
     useNewUrlParser: true, 

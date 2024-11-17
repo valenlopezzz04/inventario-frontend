@@ -17,7 +17,7 @@ function GestionUsuarios() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, p: 3 }}>
+    <Box sx={{ padding: '20px', marginLeft: '240px' }}>
       <Typography variant="h4" gutterBottom>
         Gestión de Usuarios
       </Typography>

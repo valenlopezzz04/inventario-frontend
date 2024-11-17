@@ -54,7 +54,7 @@ function ListaProductos() {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ padding: '20px', marginLeft: '240px' }}>
       {/* Sidebar */}
       <Sidebar />
 

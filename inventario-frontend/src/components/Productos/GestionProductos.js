@@ -6,23 +6,25 @@ import { useNavigate } from 'react-router-dom';
 function GestionProductos() {
   const navigate = useNavigate();
 
-  // Estilo de las tarjetas
   const cardStyle = {
-    backgroundColor: '#2196f3', // Azul
+    backgroundColor: '#2196f3',
     color: 'white',
     textAlign: 'center',
     padding: '20px',
     borderRadius: '10px',
     height: '150px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   };
 
   return (
-    <Box sx={{ flexGrow: 1, p: 3 }}>
+    <Box sx={{ padding: '20px', marginLeft: '240px' }}>
       <Typography variant="h4" gutterBottom>
         Gestión de Productos
       </Typography>
       <Grid container spacing={3}>
-        {/* Crear Producto */}
         <Grid item xs={12} sm={6} md={4}>
           <Paper elevation={3} style={cardStyle}>
             <AddCircle fontSize="large" />
@@ -37,9 +39,8 @@ function GestionProductos() {
           </Paper>
         </Grid>
 
-        {/* Ver Productos */}
         <Grid item xs={12} sm={6} md={4}>
-          <Paper elevation={3} style={{ ...cardStyle, backgroundColor: '#4caf50' }}> {/* Verde */}
+          <Paper elevation={3} style={{ ...cardStyle, backgroundColor: '#4caf50' }}>
             <List fontSize="large" />
             <Typography variant="h6">Ver Productos</Typography>
             <Button
@@ -52,9 +53,8 @@ function GestionProductos() {
           </Paper>
         </Grid>
 
-        {/* Editar Productos */}
         <Grid item xs={12} sm={6} md={4}>
-          <Paper elevation={3} style={{ ...cardStyle, backgroundColor: '#f44336' }}> {/* Rojo */}
+          <Paper elevation={3} style={{ ...cardStyle, backgroundColor: '#f44336' }}>
             <Edit fontSize="large" />
             <Typography variant="h6">Editar Producto</Typography>
             <Button

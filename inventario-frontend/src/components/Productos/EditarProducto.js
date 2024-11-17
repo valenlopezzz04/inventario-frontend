@@ -10,7 +10,7 @@ import {
   MenuItem,
   Grid,
 } from '@mui/material';
-import Navbar from '../Navbar';
+
 import Sidebar from '../Sidebar';
 
 function EditarProducto() {
@@ -78,12 +78,7 @@ function EditarProducto() {
     <Box sx={{ display: 'flex' }}>
       {/* Sidebar */}
       <Sidebar />
-
-      {/* Contenido principal */}
-      <Box sx={{ flexGrow: 1, p: 3 }}>
-        {/* Navbar */}
-        <Navbar />
-
+        
         {/* Encabezado */}
         <Typography variant="h4" gutterBottom>
           Editar Producto
@@ -161,8 +156,8 @@ function EditarProducto() {
           </Typography>
         )}
       </Box>
-    </Box>
-  );
+
+      )
 }
 
 export default EditarProducto;

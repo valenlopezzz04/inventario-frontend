@@ -1,148 +1,93 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import {
-  Box,
-  Paper,
-  Typography,
-  TextField,
-  Button,
-  Grid,
-  MenuItem,
-} from '@mui/material';
-import Navbar from '../Navbar';
-import Sidebar from '../Sidebar';
+import { TextField, Button, Typography, Box } from '@mui/material';
+import axios from '../../Config/axiosConfig'; // Importamos la configuración de Axios
 
 function CrearProductos() {
-  const [formData, setFormData] = useState({
-    nombre_producto: '',
-    cantidad: '',
-    ubicacion_almacen: '',
-    estado: 'Disponible',
-    categoria: '',
-  });
+  const [nombre, setNombre] = useState('');
+  const [cantidad, setCantidad] = useState('');
+  const [ubicacion, setUbicacion] = useState('');
+  const [estado, setEstado] = useState('Disponible'); // Por defecto, 'Disponible'
+  const [categoria, setCategoria] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const [mensaje, setMensaje] = useState('');
-
-  // Manejar cambios en los campos del formulario
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  // Enviar los datos al backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        'http://localhost:3001/gestion/productos',
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-      setMensaje('Producto creado con éxito.');
-      setFormData({
-        nombre_producto: '',
-        cantidad: '',
-        ubicacion_almacen: '',
-        estado: 'Disponible',
-        categoria: '',
+      // Enviar datos al backend
+      const response = await axios.post('/gestion/productos', {
+        nombre_producto: nombre,
+        cantidad: parseInt(cantidad), // Aseguramos que la cantidad sea un número
+        ubicacion_almacen: ubicacion,
+        estado,
+        categoria,
       });
-      console.log('Respuesta del backend:', response.data);
-    } catch (error) {
-      console.error('Error al crear el producto:', error);
-      setMensaje('Hubo un error al crear el producto.');
+
+      // Mostrar mensaje de éxito
+      setSuccess('Producto creado con éxito');
+      setError('');
+      setNombre('');
+      setCantidad('');
+      setUbicacion('');
+      setCategoria('');
+    } catch (err) {
+      setError('Error al crear el producto. Inténtalo nuevamente.');
+      setSuccess('');
     }
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      {/* Sidebar */}
-      <Sidebar />
+    <Box sx={{ p: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Crear Producto
+      </Typography>
+      <form onSubmit={handleSubmit}>
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Nombre del Producto"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+          required
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Cantidad"
+          type="number"
+          value={cantidad}
+          onChange={(e) => setCantidad(e.target.value)}
+          required
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Ubicación en el Almacén"
+          value={ubicacion}
+          onChange={(e) => setUbicacion(e.target.value)}
+          required
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Categoría"
+          value={categoria}
+          onChange={(e) => setCategoria(e.target.value)}
+          required
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{ mt: 2 }}
+        >
+          Crear Producto
+        </Button>
+      </form>
 
-      {/* Contenido principal */}
-      <Box sx={{ flexGrow: 1, p: 3 }}>
-        {/* Navbar */}
-        <Navbar />
-
-        {/* Formulario */}
-        <Typography variant="h4" gutterBottom>
-          Crear Nuevo Producto
-        </Typography>
-        <Paper elevation={3} sx={{ p: 3 }}>
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Nombre del Producto"
-                  name="nombre_producto"
-                  value={formData.nombre_producto}
-                  onChange={handleChange}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Cantidad"
-                  name="cantidad"
-                  type="number"
-                  value={formData.cantidad}
-                  onChange={handleChange}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Ubicación en Almacén"
-                  name="ubicacion_almacen"
-                  value={formData.ubicacion_almacen}
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  select
-                  fullWidth
-                  label="Estado"
-                  name="estado"
-                  value={formData.estado}
-                  onChange={handleChange}
-                >
-                  <MenuItem value="Disponible">Disponible</MenuItem>
-                  <MenuItem value="Agotado">Agotado</MenuItem>
-                </TextField>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Categoría"
-                  name="categoria"
-                  value={formData.categoria}
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Button variant="contained" color="primary" type="submit">
-                  Crear Producto
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-          {mensaje && (
-            <Typography variant="body1" sx={{ mt: 2, color: 'green' }}>
-              {mensaje}
-            </Typography>
-          )}
-        </Paper>
-      </Box>
+      {/* Mensajes de éxito o error */}
+      {success && <Typography color="success.main">{success}</Typography>}
+      {error && <Typography color="error.main">{error}</Typography>}
     </Box>
   );
 }
