@@ -32,7 +32,7 @@ function EditarProducto() {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/gestion/productos', {
+        const response = await axios.get('https://inventario-backend-1.onrender.com/gestion/productos', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -57,7 +57,7 @@ function EditarProducto() {
   const handleSave = async () => {
     try {
       await axios.put(
-        `http://localhost:3001/gestion/productos/${selectedProducto._id}`,
+        `https://inventario-backend-1.onrender.com/gestion/productos/${selectedProducto._id}`,
         selectedProducto,
         {
           headers: {
@@ -84,7 +84,7 @@ function EditarProducto() {
   // Manejar eliminación de un producto
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/gestion/productos/${id}`, {
+      await axios.delete(`https://inventario-backend-1.onrender.com/gestion/productos/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },

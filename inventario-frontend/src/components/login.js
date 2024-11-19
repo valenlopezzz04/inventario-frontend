@@ -12,7 +12,7 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/auth/login', { email, password });
+      const response = await axios.post('https://inventario-backend-1.onrender.com/auth/login', { email, password });
       localStorage.setItem('token', response.data.token);
       navigate('/');
     } catch (err) {

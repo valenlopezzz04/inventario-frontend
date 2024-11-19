@@ -20,7 +20,7 @@ function ListaProductos() {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/gestion/productos', {
+        const response = await axios.get('https://inventario-backend-1.onrender.com/gestion/productos', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
