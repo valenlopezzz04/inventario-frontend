@@ -1,10 +1,8 @@
-// routes/auth.js
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuario');
 const router = express.Router();
-const bcrypt = require('bcrypt');
 
 const JWT_SECRET = 'valentina';
 
@@ -32,7 +30,7 @@ const verificarAdmin = (req, res, next) => {
     next();
 };
 
-// Registro de usuario
+// Registro de usuario (sin hashing)
 router.post('/register', [
     body('nombre').isString().notEmpty().withMessage('El nombre es obligatorio.'),
     body('email').isEmail().withMessage('Debe ser un email válido.'),
@@ -51,9 +49,7 @@ router.post('/register', [
             return res.status(400).json({ message: 'El usuario ya existe.' });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const usuario = new Usuario({ nombre, email, password: hashedPassword, role: role || 'standard' });
+        const usuario = new Usuario({ nombre, email, password, role: role || 'standard' });
         await usuario.save();
 
         res.status(201).json({ message: 'Usuario registrado con éxito.' });
@@ -62,7 +58,7 @@ router.post('/register', [
     }
 });
 
-// Inicio de sesión
+// Inicio de sesión (sin hashing)
 router.post('/login', [
     body('email').isEmail().withMessage('Debe ser un email válido.'),
     body('password').exists().withMessage('La contraseña es obligatoria.')
@@ -75,7 +71,11 @@ router.post('/login', [
     const { email, password } = req.body;
     try {
         const usuario = await Usuario.findOne({ email });
-        if (!usuario || !(await bcrypt.compare(password, usuario.password))) {
+        if (!usuario) {
+            return res.status(400).json({ message: 'Credenciales incorrectas.' });
+        }
+
+        if (usuario.password !== password) {
             return res.status(400).json({ message: 'Credenciales incorrectas.' });
         }
 
@@ -93,6 +93,16 @@ router.get('/usuarios', verificarToken, verificarAdmin, async (req, res) => {
         res.json(usuarios);
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+});
+
+// Endpoint para eliminar usuario
+router.delete('/usuarios/:id', verificarToken, verificarAdmin, async (req, res) => {
+    try {
+        await Usuario.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Usuario eliminado con éxito.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Hubo un error al eliminar el usuario.' });
     }
 });
 

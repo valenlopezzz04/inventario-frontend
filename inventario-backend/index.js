@@ -12,11 +12,24 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Configurar CORS
+const allowedOrigins = [
+    'http://localhost:3000', // Frontend en desarrollo local
+    'https://mi-frontend.vercel.app', // Reemplaza con la URL de tu frontend en producción
+];
+
 app.use(cors({
-    origin: 'http://localhost:3000', // Permitir solicitudes desde el frontend (React)
-    credentials: true, // Permitir cookies y headers personalizados
+    origin: (origin, callback) => {
+        // Permite solicitudes sin origen (por ejemplo, desde herramientas como Postman)
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('No permitido por CORS'));
+        }
+    },
+    credentials: true, // Permitir cookies o headers personalizados
 }));
 
+// Conexión a MongoDB Atlas
 mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://valejalopez444:valentina@gestioninventario.o72zu.mongodb.net/?retryWrites=true&w=majority&appName=GestionInventario', { 
     useNewUrlParser: true, 
     useUnifiedTopology: true 

@@ -24,7 +24,7 @@ function ListaUsuarios() {
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const response = await axios.get('/gestion/usuarios', {
+        const response = await axios.get('/auth/usuarios', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -43,7 +43,7 @@ function ListaUsuarios() {
   // Eliminar un usuario
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/gestion/usuarios/${id}`, {
+      await axios.delete(`/auth/usuarios/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -95,14 +95,6 @@ function ListaUsuarios() {
                   <TableCell>{usuario.email}</TableCell>
                   <TableCell>{usuario.role}</TableCell>
                   <TableCell>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => navigate(`/usuarios/editar/${usuario._id}`)}
-                      sx={{ mr: 1 }}
-                    >
-                      Editar
-                    </Button>
                     <Button
                       variant="contained"
                       color="secondary"
