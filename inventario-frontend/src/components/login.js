@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, Typography } from '@mui/material';
-import axios from 'axios';
+import axiosInstance from '../config/axiosConfig'; // Asegúrate de que el path sea correcto
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -12,9 +12,9 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://inventario-backend-1.onrender.com/auth/login', { email, password });
+      const response = await axiosInstance.post('/auth/login', { email, password }); // Usando axiosInstance
       localStorage.setItem('token', response.data.token);
-      navigate('/');
+      navigate('/'); // Redirige al dashboard o página principal
     } catch (err) {
       setError('Credenciales incorrectas.');
     }
@@ -66,4 +66,3 @@ function Login() {
 }
 
 export default Login;
-

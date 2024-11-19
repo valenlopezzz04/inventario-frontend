@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../config/axiosConfig'; // Asegúrate de que el path sea correcto
 
 function Register() {
     const [nombre, setNombre] = useState('');
@@ -14,13 +14,13 @@ function Register() {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('https://inventario-backend-1.onrender.com/auth/register', {
+            await axiosInstance.post('/auth/register', { // Usando axiosInstance
                 nombre,
                 email,
                 password,
                 role
             });
-            navigate('/login'); // Redirigir al login
+            navigate('/login'); // Redirigir al login después de registrarse
         } catch (err) {
             setError('Error al registrar usuario. Inténtalo nuevamente.');
         }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Box, Alert } from '@mui/material';
-import axios from '../../Config/axiosConfig';
+import axiosInstance from '../../Config/axiosConfig'; // Asegúrate de que el path sea correcto
 
 function CrearProductos() {
   const [nombre, setNombre] = useState('');
@@ -15,7 +15,7 @@ function CrearProductos() {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         '/gestion/productos',
         {
           nombre_producto: nombre,

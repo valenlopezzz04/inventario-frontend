@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../Config/axiosConfig';
 import {
   Box,
   Paper,
@@ -32,7 +32,7 @@ function EditarProducto() {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const response = await axios.get('https://inventario-backend-1.onrender.com/gestion/productos', {
+        const response = await axiosInstance.get('/gestion/productos', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -56,15 +56,11 @@ function EditarProducto() {
   // Manejar guardado del producto editado
   const handleSave = async () => {
     try {
-      await axios.put(
-        `https://inventario-backend-1.onrender.com/gestion/productos/${selectedProducto._id}`,
-        selectedProducto,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      await axiosInstance.put(`/gestion/productos/${selectedProducto._id}`, selectedProducto, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
       setSuccess('Producto actualizado con éxito.');
       setError('');
       setOpen(false); // Cerrar popup
@@ -84,7 +80,7 @@ function EditarProducto() {
   // Manejar eliminación de un producto
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://inventario-backend-1.onrender.com/gestion/productos/${id}`, {
+      await axiosInstance.delete(`/gestion/productos/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },

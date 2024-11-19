@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../Config/axiosConfig';
 import {
   Box,
   Paper,
@@ -20,7 +20,7 @@ function ListaProductos() {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const response = await axios.get('https://inventario-backend-1.onrender.com/gestion/productos', {
+        const response = await axiosInstance.get('/gestion/productos', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
