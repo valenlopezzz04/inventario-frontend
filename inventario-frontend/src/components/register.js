@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../Config/axiosConfig'; // Asegúrate de que el path sea correcto
+import axiosInstance from '../Config/axiosConfig';
 
 function Register() {
     const [nombre, setNombre] = useState('');
@@ -14,18 +14,18 @@ function Register() {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            console.log('Datos enviados al backend:', { nombre, email, password, role }); // Log para depuración
+            console.log('Datos enviados al backend:', JSON.stringify({ nombre, email, password, role }));
             const response = await axiosInstance.post('/auth/register', { 
                 nombre,
                 email,
                 password,
-                role,
+                role
             });
-            console.log('Respuesta del backend:', response.data); // Log de la respuesta
-            navigate('/login'); // Redirigir al login después de registrarse
+            console.log('Respuesta del backend:', response.data);
+            navigate('/login');
         } catch (err) {
-            console.error('Error al registrar usuario:', err.response?.data || err.message); // Log del error
-            setError(err.response?.data?.message || 'Error al registrar usuario. Inténtalo nuevamente.');
+            console.error('Error al registrar usuario:', err.response?.data || err.message);
+            setError(err.response?.data?.errors?.[0]?.msg || 'Error al registrar usuario. Inténtalo nuevamente.');
         }
     };
 
