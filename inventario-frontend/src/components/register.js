@@ -14,15 +14,18 @@ function Register() {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            await axiosInstance.post('/auth/register', { // Usando axiosInstance
+            console.log('Datos enviados al backend:', { nombre, email, password, role }); // Log para depuración
+            const response = await axiosInstance.post('/auth/register', { 
                 nombre,
                 email,
                 password,
-                role
+                role,
             });
+            console.log('Respuesta del backend:', response.data); // Log de la respuesta
             navigate('/login'); // Redirigir al login después de registrarse
         } catch (err) {
-            setError('Error al registrar usuario. Inténtalo nuevamente.');
+            console.error('Error al registrar usuario:', err.response?.data || err.message); // Log del error
+            setError(err.response?.data?.message || 'Error al registrar usuario. Inténtalo nuevamente.');
         }
     };
 
