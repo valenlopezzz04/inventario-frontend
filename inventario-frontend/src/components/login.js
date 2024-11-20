@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, Typography } from '@mui/material';
-import axiosInstance from '../config/axiosConfig'; // Asegúrate de que el path sea correcto
+import axiosInstance from '../Config/axiosConfig'; // Asegúrate de que el path sea correcto
 
 function Login() {
   const [email, setEmail] = useState('');

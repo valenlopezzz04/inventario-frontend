@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../config/axiosConfig'; // Asegúrate de que el path sea correcto
+import axiosInstance from '../Config/axiosConfig'; // Asegúrate de que el path sea correcto
 
 function Register() {
     const [nombre, setNombre] = useState('');
