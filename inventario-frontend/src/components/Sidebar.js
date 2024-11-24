@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Typography, Box } from '@mui/material';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Typography, Box, Badge } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import PeopleIcon from '@mui/icons-material/People';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const drawerWidth = 240;
 
@@ -16,14 +17,13 @@ function Sidebar() {
         '& .MuiDrawer-paper': {
           width: drawerWidth,
           boxSizing: 'border-box',
-          backgroundColor: '#001E3C', // Fondo oscuro
-          color: '#fff', // Texto blanco
+          backgroundColor: '#001E3C',
+          color: '#fff',
         },
       }}
       variant="permanent"
       anchor="left"
     >
-      {/* Encabezado del Sidebar */}
       <Box sx={{ padding: 2, textAlign: 'center' }}>
         <Typography variant="h6" noWrap sx={{ color: '#90CAF9', fontWeight: 'bold' }}>
           InventarioApp
@@ -32,49 +32,32 @@ function Sidebar() {
           Administrador
         </Typography>
       </Box>
-
-      {/* Lista de opciones del Sidebar */}
       <List>
-        {/* Botón para Dashboard */}
         <ListItem button component={Link} to="/">
           <ListItemIcon sx={{ color: '#90CAF9' }}>
             <DashboardIcon />
           </ListItemIcon>
-          <ListItemText
-            primary="Dashboard"
-            sx={{
-              color: '#fff', // Texto blanco
-              fontWeight: 'bold', // Negrita
-            }}
-          />
+          <ListItemText primary="Dashboard" sx={{ color: '#fff', fontWeight: 'bold' }} />
         </ListItem>
-
-        {/* Botón para Gestión de Productos */}
         <ListItem button component={Link} to="/productos">
           <ListItemIcon sx={{ color: '#90CAF9' }}>
             <InventoryIcon />
           </ListItemIcon>
-          <ListItemText
-            primary="Gestión de Productos"
-            sx={{
-              color: '#fff', // Texto blanco
-              fontWeight: 'bold', // Negrita
-            }}
-          />
+          <ListItemText primary="Gestión de Productos" sx={{ color: '#fff', fontWeight: 'bold' }} />
         </ListItem>
-
-        {/* Botón para Gestión de Usuarios */}
         <ListItem button component={Link} to="/usuarios">
           <ListItemIcon sx={{ color: '#90CAF9' }}>
             <PeopleIcon />
           </ListItemIcon>
-          <ListItemText
-            primary="Gestión de Usuarios"
-            sx={{
-              color: '#fff', // Texto blanco
-              fontWeight: 'bold', // Negrita
-            }}
-          />
+          <ListItemText primary="Gestión de Usuarios" sx={{ color: '#fff', fontWeight: 'bold' }} />
+        </ListItem>
+        <ListItem button component={Link} to="/notificaciones">
+          <ListItemIcon sx={{ color: '#90CAF9' }}>
+            <Badge badgeContent={1} color="error">
+              <NotificationsIcon />
+            </Badge>
+          </ListItemIcon>
+          <ListItemText primary="Notificaciones" sx={{ color: '#fff', fontWeight: 'bold' }} />
         </ListItem>
       </List>
     </Drawer>

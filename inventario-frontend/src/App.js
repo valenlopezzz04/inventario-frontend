@@ -12,6 +12,7 @@ import ListaProductos from './components/Productos/ListaProductos';
 import GestionUsuarios from './components/Usuario/GestionUsuarios';
 import ListaUsuarios from './components/Usuario/Listausuario';
 import ProtectedRoute from './components/ProtectedRoute';
+import Notificaciones from './components/Notificaciones/Notificaciones'; // Importar el nuevo componente de Notificaciones
 
 function App() {
   return (
@@ -106,10 +107,22 @@ function App() {
             </ProtectedRoute>
           }
         />
+        {/* Ruta para Notificaciones */}
+        <Route
+          path="/notificaciones"
+          element={
+            <ProtectedRoute>
+              <>
+                <Navbar />
+                <Sidebar />
+                <Notificaciones />
+              </>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
 }
 
 export default App;
-
