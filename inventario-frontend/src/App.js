@@ -12,7 +12,7 @@ import ListaProductos from './components/Productos/ListaProductos';
 import GestionUsuarios from './components/Usuario/GestionUsuarios';
 import ListaUsuarios from './components/Usuario/Listausuario';
 import ProtectedRoute from './components/ProtectedRoute';
-import Notificaciones from './components/Notificaciones/Notificaciones'; // Importar el nuevo componente de Notificaciones
+import Notificaciones from './components/Notificaciones'; // Importar el nuevo componente de Notificaciones
 
 function App() {
   return (
