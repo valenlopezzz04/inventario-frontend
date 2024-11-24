@@ -13,7 +13,7 @@ import ListaProductos from './components/Productos/ListaProductos';
 import GestionUsuarios from './components/Usuario/GestionUsuarios';
 import ListaUsuarios from './components/Usuario/Listausuario';
 import ProtectedRoute from './components/ProtectedRoute';
-import Notificaciones from './components/Notificaciones';
+import Notificaciones from './components/Notificaciones'; // Ruta corregida
 
 const backendUrl = 'https://inventario-backend-1.onrender.com';
 
@@ -47,16 +47,12 @@ function App() {
   return (
     <Router>
       <div style={{ display: 'flex' }}>
-        {/* Renderizar Sidebar solo en rutas privadas */}
         <Routes>
-          <Route
-            path="/login"
-            element={<Login />}
-          />
-          <Route
-            path="/register"
-            element={<Register />}
-          />
+          {/* Rutas públicas */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Rutas privadas */}
           <Route
             path="/"
             element={
