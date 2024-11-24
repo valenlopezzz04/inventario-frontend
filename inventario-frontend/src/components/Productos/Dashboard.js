@@ -31,7 +31,7 @@ function Dashboard() {
         const productos = response.data;
         setTotalProductos(productos.length);
         setInventarioActivo(productos.filter((producto) => producto.estado === 'Disponible').length);
-        setProductosSinStock(productos.filter((producto) => producto.cantidad < 4).length);
+        setProductosSinStock(productos.filter((producto) => producto.cantidad < 5).length);
         setUltimaActualizacion(new Date().toLocaleString());
       } catch (error) {
         console.error('Error al cargar los datos del dashboard:', error.response?.data || error.message);

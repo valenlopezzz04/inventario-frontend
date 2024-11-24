@@ -94,14 +94,16 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
+      <Route
   path="/productos/lista"
   element={
-    <>
-      <Navbar />
-      <Sidebar notificaciones={notificaciones} />
-      <ListaProductos />
-    </>
+    <ProtectedRoute>
+      <>
+        <Navbar />
+        <Sidebar />
+        <ListaProductos />
+      </>
+    </ProtectedRoute>
   }
 />
         <Route
