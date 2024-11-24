@@ -5,6 +5,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import PeopleIcon from '@mui/icons-material/People';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 const drawerWidth = 240;
 
@@ -59,6 +60,12 @@ function Sidebar() {
           </ListItemIcon>
           <ListItemText primary="Notificaciones" sx={{ color: '#fff', fontWeight: 'bold' }} />
         </ListItem>
+        <ListItem button component={Link} to="/auditorias">
+        <ListItemIcon sx={{ color: '#90CAF9' }}>
+          <AssignmentIcon />
+        </ListItemIcon>
+        <ListItemText primary="Auditorías" sx={{ color: '#fff', fontWeight: 'bold' }} />
+      </ListItem>
       </List>
     </Drawer>
   );

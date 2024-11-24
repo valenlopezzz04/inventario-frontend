@@ -13,7 +13,8 @@ import ListaProductos from './components/Productos/ListaProductos';
 import GestionUsuarios from './components/Usuario/GestionUsuarios';
 import ListaUsuarios from './components/Usuario/Listausuario';
 import ProtectedRoute from './components/ProtectedRoute';
-import Notificaciones from './components/Notificaciones'; // Importar el nuevo componente de Notificaciones
+import Notificaciones from './components/Notificaciones'; 
+import Auditorias from './components/Auditorias/Auditorias';
 
 const backendUrl = 'https://inventario-backend-1.onrender.com'; // URL correcta del backend
 
@@ -144,6 +145,19 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+<Route
+  path="/auditorias"
+  element={
+    <ProtectedRoute>
+      <>
+        <Navbar />
+        <Sidebar notificaciones={notificaciones} />
+        <Auditorias />
+      </>
+    </ProtectedRoute>
+  }
+/>
       </Routes>
     </Router>
   );
