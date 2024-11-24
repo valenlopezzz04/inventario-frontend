@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axiosInstance from '../../Config/axiosConfig';
 import {
   Box,
   Paper,
@@ -10,29 +9,39 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Alert,
 } from '@mui/material';
 
 function ListaProductos() {
   const [productos, setProductos] = useState([]);
-  const [error, setError] = useState(''); // Para manejar errores
+  const [error, setError] = useState('');
+
+  // URL absoluta del backend
+  const backendUrl = 'https://inventario-backend-1.onrender.com/gestion/productos';
 
   // Cargar productos desde el backend
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const token = localStorage.getItem('token'); // Asegurarse de obtener el token
+        const token = localStorage.getItem('token'); // Asegúrate de que el token está configurado
         if (!token) {
-          throw new Error('No se encontró un token de autenticación');
+          throw new Error('No se encontró un token de autenticación.');
         }
 
-        const response = await axiosInstance.get('/gestion/productos', {
+        // Realizar la solicitud con la URL absoluta
+        const response = await fetch(backendUrl, {
+          method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
         });
 
-        setProductos(response.data);
+        if (!response.ok) {
+          throw new Error(`Error al obtener productos: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setProductos(data);
       } catch (err) {
         console.error('Error al cargar los productos:', err.message || err);
         setError('Error al cargar los productos. Por favor, inténtalo de nuevo.');
@@ -50,7 +59,12 @@ function ListaProductos() {
         </Typography>
         <Paper elevation={3} sx={{ p: 3 }}>
           {error ? (
-            <Alert severity="error">{error}</Alert>
+            <Typography
+              variant="body1"
+              sx={{ mt: 2, textAlign: 'center', color: 'red' }}
+            >
+              {error}
+            </Typography>
           ) : (
             <TableContainer>
               <Table>
@@ -61,8 +75,6 @@ function ListaProductos() {
                     <TableCell><strong>Ubicación</strong></TableCell>
                     <TableCell><strong>Estado</strong></TableCell>
                     <TableCell><strong>Categoría</strong></TableCell>
-                    <TableCell><strong>Reposición Automática</strong></TableCell>
-                    <TableCell><strong>Cantidad Reposición</strong></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -73,12 +85,6 @@ function ListaProductos() {
                       <TableCell>{producto.ubicacion_almacen}</TableCell>
                       <TableCell>{producto.estado}</TableCell>
                       <TableCell>{producto.categoria}</TableCell>
-                      <TableCell>
-                        {producto.habilitarReposicion ? 'Sí' : 'No'}
-                      </TableCell>
-                      <TableCell>
-                        {producto.cantidad_reposicion || 'N/A'}
-                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
