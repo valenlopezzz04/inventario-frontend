@@ -16,7 +16,6 @@ import {
   Alert,
 } from '@mui/material';
 
-
 function Ordenes() {
   const [ordenes, setOrdenes] = useState([]);
   const [error, setError] = useState('');
@@ -24,11 +23,11 @@ function Ordenes() {
   const [alerta, setAlerta] = useState(false);
 
   const backendUrl = 'https://inventario-backend-1.onrender.com';
+
   useEffect(() => {
     const fetchOrdenes = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/gestion/ordenes`, { 
- 
+        const response = await axios.get(`${backendUrl}/gestion/ordenes`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         setOrdenes(response.data);
@@ -44,7 +43,7 @@ function Ordenes() {
   const handleActualizarEstado = async (id, estado) => {
     try {
       const response = await axios.put(
-        `/gestion/ordenes/${id}`,
+        `${backendUrl}/gestion/ordenes/${id}`,
         { estado },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Box, Alert, Snackbar } from '@mui/material';
+import { TextField, Button, Typography, Box, Alert, Snackbar, FormControlLabel, Checkbox } from '@mui/material';
 import axiosInstance from '../../Config/axiosConfig';
 
 function CrearProductos() {
@@ -8,6 +8,8 @@ function CrearProductos() {
   const [ubicacion, setUbicacion] = useState('');
   const [estado, setEstado] = useState('Disponible');
   const [categoria, setCategoria] = useState('');
+  const [habilitarReposicion, setHabilitarReposicion] = useState(false); // Nuevo estado
+  const [cantidadReposicion, setCantidadReposicion] = useState(10); // Nueva cantidad por defecto
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [mensajeAlerta, setMensajeAlerta] = useState(false);
@@ -24,6 +26,8 @@ function CrearProductos() {
           ubicacion_almacen: ubicacion,
           estado,
           categoria,
+          habilitarReposicion, // Enviar al backend
+          cantidad_reposicion: parseInt(cantidadReposicion), // Enviar cantidad de reposición
         },
         {
           headers: {
@@ -38,6 +42,8 @@ function CrearProductos() {
       setCantidad('');
       setUbicacion('');
       setCategoria('');
+      setHabilitarReposicion(false);
+      setCantidadReposicion(10);
 
       // Mostrar alerta si la cantidad es menor a 5
       if (parseInt(cantidad) < 5) {
@@ -97,6 +103,25 @@ function CrearProductos() {
           onChange={(e) => setCategoria(e.target.value)}
           required
         />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={habilitarReposicion}
+              onChange={(e) => setHabilitarReposicion(e.target.checked)}
+            />
+          }
+          label="Habilitar Reposición Automática"
+        />
+        {habilitarReposicion && (
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Cantidad de Reposición"
+            type="number"
+            value={cantidadReposicion}
+            onChange={(e) => setCantidadReposicion(e.target.value)}
+          />
+        )}
         <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
           Crear Producto
         </Button>
@@ -120,3 +145,4 @@ function CrearProductos() {
 }
 
 export default CrearProductos;
+
