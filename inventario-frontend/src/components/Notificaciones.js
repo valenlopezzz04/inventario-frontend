@@ -1,7 +1,7 @@
 const Notificaciones = ({ notificaciones, setNotificaciones }) => {
     const marcarComoLeida = async (id) => {
       try {
-        await axios.delete(`https://tu-backend-url/gestion/notificaciones/${id}`, {
+        await axios.delete(`https://inventario-backend-1.onrender.com`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         setNotificaciones((prev) => prev.filter((notificacion) => notificacion._id !== id));
