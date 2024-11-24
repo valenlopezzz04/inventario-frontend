@@ -17,18 +17,20 @@ import {
   DialogActions,
   Button,
   TextField,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 function EditarProducto() {
   const [productos, setProductos] = useState([]);
-  const [selectedProducto, setSelectedProducto] = useState(null); // Producto seleccionado para editar
+  const [selectedProducto, setSelectedProducto] = useState(null); 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [open, setOpen] = useState(false); // Controlar apertura del popup
+  const [open, setOpen] = useState(false);
+  const [mensajeAlerta, setMensajeAlerta] = useState(false);
 
-  // Cargar productos desde el backend
   useEffect(() => {
     const fetchProductos = async () => {
       try {
@@ -39,7 +41,6 @@ function EditarProducto() {
         });
         setProductos(response.data);
       } catch (error) {
-        console.error('Error al cargar los productos:', error);
         setError('Error al cargar los productos.');
       }
     };
@@ -47,13 +48,11 @@ function EditarProducto() {
     fetchProductos();
   }, []);
 
-  // Manejar edición de un producto
   const handleEdit = (producto) => {
     setSelectedProducto(producto);
-    setOpen(true); // Abrir popup
+    setOpen(true);
   };
 
-  // Manejar guardado del producto editado
   const handleSave = async () => {
     try {
       await axiosInstance.put(`/gestion/productos/${selectedProducto._id}`, selectedProducto, {
@@ -63,21 +62,22 @@ function EditarProducto() {
       });
       setSuccess('Producto actualizado con éxito.');
       setError('');
-      setOpen(false); // Cerrar popup
+      setOpen(false);
 
-      // Actualizar la lista de productos
       setProductos((prevProductos) =>
         prevProductos.map((producto) =>
           producto._id === selectedProducto._id ? selectedProducto : producto
         )
       );
+
+      if (selectedProducto.cantidad < 5) {
+        setMensajeAlerta(true);
+      }
     } catch (err) {
-      console.error('Error al actualizar el producto:', err);
       setError('Error al actualizar el producto.');
     }
   };
 
-  // Manejar eliminación de un producto
   const handleDelete = async (id) => {
     try {
       await axiosInstance.delete(`/gestion/productos/${id}`, {
@@ -91,12 +91,10 @@ function EditarProducto() {
       setSuccess('Producto eliminado con éxito.');
       setError('');
     } catch (err) {
-      console.error('Error al eliminar el producto:', err);
       setError('Error al eliminar el producto.');
     }
   };
 
-  // Manejar cambios en los campos del formulario de edición
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSelectedProducto((prev) => ({
@@ -160,7 +158,6 @@ function EditarProducto() {
         )}
       </Paper>
 
-      {/* Popup de edición */}
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Editar Producto</DialogTitle>
         <DialogContent>
@@ -221,13 +218,20 @@ function EditarProducto() {
         </DialogActions>
       </Dialog>
 
-      {/* Mensajes */}
       {success && <Typography color="success.main">{success}</Typography>}
       {error && <Typography color="error.main">{error}</Typography>}
+
+      <Snackbar
+        open={mensajeAlerta}
+        autoHideDuration={5000}
+        onClose={() => setMensajeAlerta(false)}
+      >
+        <Alert onClose={() => setMensajeAlerta(false)} severity="warning" sx={{ width: '100%' }}>
+          ¡Stock insuficiente! Revisar notificaciones.
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
 
 export default EditarProducto;
-
-

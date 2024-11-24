@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Box, Alert } from '@mui/material';
-import axiosInstance from '../../Config/axiosConfig'; // Asegúrate de que el path sea correcto
+import { TextField, Button, Typography, Box, Alert, Snackbar } from '@mui/material';
+import axiosInstance from '../../Config/axiosConfig';
 
 function CrearProductos() {
   const [nombre, setNombre] = useState('');
@@ -10,6 +10,7 @@ function CrearProductos() {
   const [categoria, setCategoria] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [mensajeAlerta, setMensajeAlerta] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,6 +38,11 @@ function CrearProductos() {
       setCantidad('');
       setUbicacion('');
       setCategoria('');
+
+      // Mostrar alerta si la cantidad es menor a 5
+      if (parseInt(cantidad) < 5) {
+        setMensajeAlerta(true);
+      }
     } catch (err) {
       setError('Error al crear el producto. Inténtalo nuevamente.');
       setSuccess('');
@@ -98,6 +104,17 @@ function CrearProductos() {
 
       {success && <Alert severity="success" sx={{ mt: 2 }}>{success}</Alert>}
       {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
+
+      {/* Mensaje emergente */}
+      <Snackbar
+        open={mensajeAlerta}
+        autoHideDuration={5000}
+        onClose={() => setMensajeAlerta(false)}
+      >
+        <Alert onClose={() => setMensajeAlerta(false)} severity="warning" sx={{ width: '100%' }}>
+          ¡Stock insuficiente! Revisar notificaciones.
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
