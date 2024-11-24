@@ -5,11 +5,11 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import PeopleIcon from '@mui/icons-material/People';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 
 const drawerWidth = 240;
 
-function Sidebar() {
+function Sidebar({ notificaciones }) {
   return (
     <Drawer
       sx={{
@@ -52,26 +52,30 @@ function Sidebar() {
           </ListItemIcon>
           <ListItemText primary="Gestión de Usuarios" sx={{ color: '#fff', fontWeight: 'bold' }} />
         </ListItem>
-        <ListItem button component={Link} to="/Notificaciones">
+        <ListItem button component={Link} to="/notificaciones">
           <ListItemIcon sx={{ color: '#90CAF9' }}>
-            <Badge badgeContent={1} color="error">
+            <Badge
+              badgeContent={notificaciones.length > 0 ? "!" : null}
+              color="error"
+              variant={notificaciones.length > 0 ? "standard" : "dot"}
+            >
               <NotificationsIcon />
             </Badge>
           </ListItemIcon>
           <ListItemText primary="Notificaciones" sx={{ color: '#fff', fontWeight: 'bold' }} />
         </ListItem>
         <ListItem button component={Link} to="/auditorias">
-        <ListItemIcon sx={{ color: '#90CAF9' }}>
-          <AssignmentIcon />
-        </ListItemIcon>
-        <ListItemText primary="Auditorías" sx={{ color: '#fff', fontWeight: 'bold' }} />
-      </ListItem>
-      <ListItem button component={Link} to="/ordenes">
-  <ListItemIcon sx={{ color: '#90CAF9' }}>
-    <InventoryIcon /> {/* Puedes cambiar el ícono si lo deseas */}
-  </ListItemIcon>
-  <ListItemText primary="Gestión de Órdenes" sx={{ color: '#fff', fontWeight: 'bold' }} />
-</ListItem>
+          <ListItemIcon sx={{ color: '#90CAF9' }}>
+            <ListAltIcon />
+          </ListItemIcon>
+          <ListItemText primary="Auditorías" sx={{ color: '#fff', fontWeight: 'bold' }} />
+        </ListItem>
+        <ListItem button component={Link} to="/ordenes">
+          <ListItemIcon sx={{ color: '#90CAF9' }}>
+            <InventoryIcon />
+          </ListItemIcon>
+          <ListItemText primary="Gestión de Órdenes" sx={{ color: '#fff', fontWeight: 'bold' }} />
+        </ListItem>
       </List>
     </Drawer>
   );

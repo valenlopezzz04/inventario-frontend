@@ -13,7 +13,7 @@ import ListaProductos from './components/Productos/ListaProductos';
 import GestionUsuarios from './components/Usuario/GestionUsuarios';
 import ListaUsuarios from './components/Usuario/Listausuario';
 import ProtectedRoute from './components/ProtectedRoute';
-import Notificaciones from './components/Notificaciones'; 
+import Notificaciones from './components/Notificaciones';
 import Auditorias from './components/Auditoria/Auditorias';
 import Ordenes from './components/Ordenes';
 
@@ -146,31 +146,30 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-<Route
-  path="/auditorias"
-  element={
-    <ProtectedRoute>
-      <>
-        <Navbar />
-        <Sidebar notificaciones={notificaciones} />
-        <Auditorias />
-      </>
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/ordenes"
-  element={
-    <ProtectedRoute>
-      <>
-        <Navbar />
-        <Sidebar />
-        <Ordenes />
-      </>
-    </ProtectedRoute>
-  }
-/>
+        <Route
+          path="/auditorias"
+          element={
+            <ProtectedRoute>
+              <>
+                <Navbar />
+                <Sidebar notificaciones={notificaciones} />
+                <Auditorias />
+              </>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ordenes"
+          element={
+            <ProtectedRoute>
+              <>
+                <Navbar />
+                <Sidebar notificaciones={notificaciones} />
+                <Ordenes />
+              </>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
