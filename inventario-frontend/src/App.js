@@ -94,18 +94,16 @@ function App() {
             </ProtectedRoute>
           }
         />
-      <Route
-  path="/productos/lista"
-  element={
-    <ProtectedRoute>
-      <>
-        <Navbar />
-        <Sidebar />
-        <ListaProductos />
-      </>
-    </ProtectedRoute>
-  }
-/>
+          <Route
+      path="/productos/lista"
+      element={
+        <>
+          <Navbar />
+          <ListaProductos />
+        </>
+      }
+    />
+
         <Route
           path="/usuarios"
           element={
