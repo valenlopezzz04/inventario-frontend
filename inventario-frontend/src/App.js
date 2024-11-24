@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import axios from 'axios';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import Login from './components/login';
@@ -14,7 +15,27 @@ import ListaUsuarios from './components/Usuario/Listausuario';
 import ProtectedRoute from './components/ProtectedRoute';
 import Notificaciones from './components/Notificaciones'; // Importar el nuevo componente de Notificaciones
 
+const backendUrl = 'https://inventario-backend-1.onrender.com'; // URL correcta del backend
+
 function App() {
+  // Declaración de estado para notificaciones
+  const [notificaciones, setNotificaciones] = useState([]);
+
+  // Obtener notificaciones desde el backend
+  useEffect(() => {
+    const fetchNotificaciones = async () => {
+      try {
+        const response = await axios.get(`${backendUrl}/gestion/notificaciones`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        });
+        setNotificaciones(response.data);
+      } catch (error) {
+        console.error('Error al cargar notificaciones:', error);
+      }
+    };
+    fetchNotificaciones();
+  }, []); // Se ejecuta solo al montar el componente
+
   return (
     <Router>
       <Routes>
@@ -29,7 +50,7 @@ function App() {
             <ProtectedRoute>
               <>
                 <Navbar />
-                <Sidebar />
+                <Sidebar notificaciones={notificaciones} />
                 <Dashboard />
               </>
             </ProtectedRoute>
@@ -41,7 +62,7 @@ function App() {
             <ProtectedRoute>
               <>
                 <Navbar />
-                <Sidebar />
+                <Sidebar notificaciones={notificaciones} />
                 <GestionProductos />
               </>
             </ProtectedRoute>
@@ -53,7 +74,7 @@ function App() {
             <ProtectedRoute>
               <>
                 <Navbar />
-                <Sidebar />
+                <Sidebar notificaciones={notificaciones} />
                 <CrearProducto />
               </>
             </ProtectedRoute>
@@ -65,7 +86,7 @@ function App() {
             <ProtectedRoute>
               <>
                 <Navbar />
-                <Sidebar />
+                <Sidebar notificaciones={notificaciones} />
                 <EditarProducto />
               </>
             </ProtectedRoute>
@@ -77,7 +98,7 @@ function App() {
             <ProtectedRoute>
               <>
                 <Navbar />
-                <Sidebar />
+                <Sidebar notificaciones={notificaciones} />
                 <ListaProductos />
               </>
             </ProtectedRoute>
@@ -89,7 +110,7 @@ function App() {
             <ProtectedRoute>
               <>
                 <Navbar />
-                <Sidebar />
+                <Sidebar notificaciones={notificaciones} />
                 <GestionUsuarios />
               </>
             </ProtectedRoute>
@@ -101,7 +122,7 @@ function App() {
             <ProtectedRoute>
               <>
                 <Navbar />
-                <Sidebar />
+                <Sidebar notificaciones={notificaciones} />
                 <ListaUsuarios />
               </>
             </ProtectedRoute>
@@ -109,20 +130,20 @@ function App() {
         />
         {/* Ruta para Notificaciones */}
         <Route
-  path="/notificaciones"
-  element={
-    <ProtectedRoute>
-      <>
-        <Navbar />
-        <Sidebar />
-        <Notificaciones
-          notificaciones={notificaciones}
-          setNotificaciones={setNotificaciones}
+          path="/notificaciones"
+          element={
+            <ProtectedRoute>
+              <>
+                <Navbar />
+                <Sidebar notificaciones={notificaciones} />
+                <Notificaciones
+                  notificaciones={notificaciones}
+                  setNotificaciones={setNotificaciones}
+                />
+              </>
+            </ProtectedRoute>
+          }
         />
-      </>
-    </ProtectedRoute>
-  }
-/>
       </Routes>
     </Router>
   );
