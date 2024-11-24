@@ -27,7 +27,8 @@ function Ordenes() {
   useEffect(() => {
     const fetchOrdenes = async () => {
       try {
-        const response = await axios.get('${backendUrl}/gestion/ordenes', {
+        const response = await axios.get(`${backendUrl}/gestion/ordenes`, { 
+ 
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         setOrdenes(response.data);
