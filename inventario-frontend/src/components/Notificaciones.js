@@ -3,7 +3,8 @@ import { Box, Typography, List, ListItem, ListItemText, IconButton } from '@mui/
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import axios from 'axios';
 
-const backendUrl = 'https://inventario-backend-1.onrender.com';
+const backendUrl = 'https://inventario-backend-1.onrender.com/gestion/notificaciones';
+
 
 const Notificaciones = ({ notificaciones, setNotificaciones }) => {
   const eliminarNotificacion = async (id) => {

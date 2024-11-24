@@ -109,17 +109,20 @@ function App() {
         />
         {/* Ruta para Notificaciones */}
         <Route
-          path="/notificaciones"
-          element={
-            <ProtectedRoute>
-              <>
-                <Navbar />
-                <Sidebar />
-                <Notificaciones />
-              </>
-            </ProtectedRoute>
-          }
+  path="/notificaciones"
+  element={
+    <ProtectedRoute>
+      <>
+        <Navbar />
+        <Sidebar />
+        <Notificaciones
+          notificaciones={notificaciones}
+          setNotificaciones={setNotificaciones}
         />
+      </>
+    </ProtectedRoute>
+  }
+/>
       </Routes>
     </Router>
   );
