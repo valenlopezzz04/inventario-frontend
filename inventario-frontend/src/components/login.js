@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Box, Typography } from '@mui/material';
+import { TextField, Button, Box, Typography, Paper } from '@mui/material';
 import axiosInstance from '../Config/axiosConfig'; // Asegúrate de que el path sea correcto
 
 function Login() {
@@ -12,55 +12,77 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.post('/auth/login', { email, password }); // Usando axiosInstance
+      const response = await axiosInstance.post('/auth/login', { email, password });
       localStorage.setItem('token', response.data.token);
-      navigate('/'); // Redirige al dashboard o página principal
+      navigate('/');
     } catch (err) {
       setError('Credenciales incorrectas.');
     }
   };
 
   return (
-    <Box sx={{ maxWidth: '400px', margin: 'auto', mt: 5 }}>
-      <Typography variant="h4" gutterBottom>
-        Inicia sesión para continuar
-      </Typography>
-      <form onSubmit={handleLogin}>
-        <TextField
-          fullWidth
-          label="Correo Electrónico"
-          type="email"
-          margin="normal"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <TextField
-          fullWidth
-          label="Contraseña"
-          type="password"
-          margin="normal"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-          Iniciar Sesión
-        </Button>
-      </form>
-
-      {/* Botón de registro */}
-      <Button
-        variant="outlined"
-        color="secondary"
-        fullWidth
-        sx={{ mt: 2 }}
-        onClick={() => navigate('/register')}
+    <Box
+      sx={{
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #1E3A8A, #9333EA)',
+      }}
+    >
+      <Paper
+        elevation={6}
+        sx={{
+          padding: '30px',
+          maxWidth: '400px',
+          width: '100%',
+          textAlign: 'center',
+          borderRadius: '15px',
+        }}
       >
-        Registrarse
-      </Button>
-
-      {error && <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>}
+        <Typography variant="h4" gutterBottom>
+          Iniciar Sesión
+        </Typography>
+        <form onSubmit={handleLogin}>
+          <TextField
+            fullWidth
+            label="Correo Electrónico"
+            type="email"
+            margin="normal"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <TextField
+            fullWidth
+            label="Contraseña"
+            type="password"
+            margin="normal"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 2, py: 1.5 }}
+          >
+            Iniciar Sesión
+          </Button>
+        </form>
+        <Button
+          variant="outlined"
+          color="secondary"
+          fullWidth
+          sx={{ mt: 2, py: 1.5 }}
+          onClick={() => navigate('/register')}
+        >
+          Registrarse
+        </Button>
+        {error && <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>}
+      </Paper>
     </Box>
   );
 }
