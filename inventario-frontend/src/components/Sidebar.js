@@ -8,7 +8,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const drawerWidth = 240;
 
-function Sidebar() {
+function Sidebar({ notificaciones }) {
   return (
     <Drawer
       sx={{
@@ -53,7 +53,7 @@ function Sidebar() {
         </ListItem>
         <ListItem button component={Link} to="/notificaciones">
           <ListItemIcon sx={{ color: '#90CAF9' }}>
-            <Badge badgeContent={1} color="error">
+            <Badge badgeContent={notificaciones.length} color="error">
               <NotificationsIcon />
             </Badge>
           </ListItemIcon>
