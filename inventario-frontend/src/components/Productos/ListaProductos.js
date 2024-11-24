@@ -11,7 +11,6 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import Sidebar from '../Sidebar';
 
 function ListaProductos() {
   const [productos, setProductos] = useState([]);
@@ -43,59 +42,62 @@ function ListaProductos() {
   }, []);
 
   return (
-    <Box sx={{ padding: '20px', marginLeft: '240px' }}>
-      {/* Sidebar */}
-      <Sidebar />
-
-      {/* Contenido */}
-      <Box sx={{ flexGrow: 1, p: 3 }}>
-        <Typography variant="h4" gutterBottom>
-          Gestión de Productos
-        </Typography>
-        <Paper elevation={3} sx={{ p: 3 }}>
-          {error ? (
-            <Typography
-              variant="body1"
-              sx={{ mt: 2, textAlign: 'center', color: 'red' }}
-            >
-              {error}
-            </Typography>
-          ) : (
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell><strong>Nombre</strong></TableCell>
-                    <TableCell><strong>Cantidad</strong></TableCell>
-                    <TableCell><strong>Ubicación</strong></TableCell>
-                    <TableCell><strong>Estado</strong></TableCell>
-                    <TableCell><strong>Categoría</strong></TableCell>
+    <Box
+      sx={{
+        maxWidth: '900px',
+        margin: 'auto',
+        p: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <Typography variant="h4" gutterBottom>
+        Gestión de Productos
+      </Typography>
+      <Paper elevation={3} sx={{ p: 3, width: '100%' }}>
+        {error ? (
+          <Typography
+            variant="body1"
+            sx={{ mt: 2, textAlign: 'center', color: 'red' }}
+          >
+            {error}
+          </Typography>
+        ) : (
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell><strong>Nombre</strong></TableCell>
+                  <TableCell><strong>Cantidad</strong></TableCell>
+                  <TableCell><strong>Ubicación</strong></TableCell>
+                  <TableCell><strong>Estado</strong></TableCell>
+                  <TableCell><strong>Categoría</strong></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {productos.map((producto) => (
+                  <TableRow key={producto._id}>
+                    <TableCell>{producto.nombre_producto}</TableCell>
+                    <TableCell>{producto.cantidad}</TableCell>
+                    <TableCell>{producto.ubicacion_almacen}</TableCell>
+                    <TableCell>{producto.estado}</TableCell>
+                    <TableCell>{producto.categoria}</TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {productos.map((producto) => (
-                    <TableRow key={producto._id}>
-                      <TableCell>{producto.nombre_producto}</TableCell>
-                      <TableCell>{producto.cantidad}</TableCell>
-                      <TableCell>{producto.ubicacion_almacen}</TableCell>
-                      <TableCell>{producto.estado}</TableCell>
-                      <TableCell>{producto.categoria}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-          {productos.length === 0 && !error && (
-            <Typography
-              variant="body1"
-              sx={{ mt: 2, textAlign: 'center', color: 'gray' }}
-            >
-              No hay productos disponibles en el inventario.
-            </Typography>
-          )}
-        </Paper>
-      </Box>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+        {productos.length === 0 && !error && (
+          <Typography
+            variant="body1"
+            sx={{ mt: 2, textAlign: 'center', color: 'gray' }}
+          >
+            No hay productos disponibles en el inventario.
+          </Typography>
+        )}
+      </Paper>
     </Box>
   );
 }
