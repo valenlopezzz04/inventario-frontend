@@ -47,12 +47,16 @@ function App() {
   return (
     <Router>
       <div style={{ display: 'flex' }}>
+        {/* Renderizar Sidebar solo en rutas privadas */}
         <Routes>
-          {/* Rutas públicas */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-
-          {/* Rutas privadas */}
+          <Route
+            path="/login"
+            element={<Login />}
+          />
+          <Route
+            path="/register"
+            element={<Register />}
+          />
           <Route
             path="/"
             element={
@@ -153,6 +157,7 @@ function App() {
             }
           />
         </Routes>
+        {/* Mostrar alerta visual */}
         {showAlert && (
           <div
             style={{
@@ -163,6 +168,7 @@ function App() {
               color: '#fff',
               padding: '10px 20px',
               borderRadius: '5px',
+              zIndex: 1000,
             }}
           >
             ¡Stock insuficiente! Revisa las notificaciones.

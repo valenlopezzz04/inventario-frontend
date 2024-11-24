@@ -6,14 +6,14 @@ import axios from 'axios';
 const backendUrl = 'https://inventario-backend-1.onrender.com';
 
 const Notificaciones = ({ notificaciones, setNotificaciones }) => {
-  const marcarComoLeida = async (id) => {
+  const eliminarNotificacion = async (id) => {
     try {
       await axios.delete(`${backendUrl}/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       setNotificaciones((prev) => prev.filter((notificacion) => notificacion._id !== id));
     } catch (error) {
-      console.error('Error al marcar como leída:', error);
+      console.error('Error al eliminar notificación:', error);
     }
   };
 
@@ -34,7 +34,7 @@ const Notificaciones = ({ notificaciones, setNotificaciones }) => {
                   notificacion.fecha
                 ).toLocaleString()}`}
               />
-              <IconButton edge="end" color="success" onClick={() => marcarComoLeida(notificacion._id)}>
+              <IconButton edge="end" color="success" onClick={() => eliminarNotificacion(notificacion._id)}>
                 <CheckCircleIcon />
               </IconButton>
             </ListItem>

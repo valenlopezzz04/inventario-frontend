@@ -53,7 +53,11 @@ function Sidebar({ notificaciones }) {
         </ListItem>
         <ListItem button component={Link} to="/Notificaciones">
           <ListItemIcon sx={{ color: '#90CAF9' }}>
-            <Badge badgeContent={notificaciones.length} color="error">
+            <Badge
+              badgeContent={notificaciones.length > 0 ? '!' : null}
+              color="error"
+              variant="dot"
+            >
               <NotificationsIcon />
             </Badge>
           </ListItemIcon>
@@ -65,4 +69,3 @@ function Sidebar({ notificaciones }) {
 }
 
 export default Sidebar;
-
