@@ -14,7 +14,9 @@ import {
   Chip,
   Snackbar,
   Alert,
+  IconButton,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function Ordenes() {
   const [ordenes, setOrdenes] = useState([]);
@@ -59,6 +61,21 @@ function Ordenes() {
       setAlerta(true);
     } catch (err) {
       setError('Error al actualizar la orden.');
+      console.error(err);
+    }
+  };
+
+  const handleEliminarOrden = async (id) => {
+    try {
+      await axios.delete(`${backendUrl}/gestion/ordenes/${id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+
+      setOrdenes((prevOrdenes) => prevOrdenes.filter((orden) => orden._id !== id));
+      setSuccess('Orden eliminada con éxito.');
+      setAlerta(true);
+    } catch (err) {
+      setError('Error al eliminar la orden.');
       console.error(err);
     }
   };
@@ -112,10 +129,17 @@ function Ordenes() {
                         variant="contained"
                         color="primary"
                         onClick={() => handleActualizarEstado(orden._id, 'Completada')}
+                        sx={{ marginRight: '10px' }}
                       >
                         Completar
                       </Button>
                     )}
+                    <IconButton
+                      color="error"
+                      onClick={() => handleEliminarOrden(orden._id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
