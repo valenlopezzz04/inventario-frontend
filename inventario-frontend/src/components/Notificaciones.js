@@ -51,3 +51,4 @@ const Notificaciones = ({ notificaciones, setNotificaciones }) => {
     );
   };
   
+  export default Notificaciones;
