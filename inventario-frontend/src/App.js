@@ -15,6 +15,7 @@ import ListaUsuarios from './components/Usuario/Listausuario';
 import ProtectedRoute from './components/ProtectedRoute';
 import Notificaciones from './components/Notificaciones'; 
 import Auditorias from './components/Auditoria/Auditorias';
+import Ordenes from './components/Ordenes';
 
 const backendUrl = 'https://inventario-backend-1.onrender.com'; // URL correcta del backend
 
@@ -154,6 +155,18 @@ function App() {
         <Navbar />
         <Sidebar notificaciones={notificaciones} />
         <Auditorias />
+      </>
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/ordenes"
+  element={
+    <ProtectedRoute>
+      <>
+        <Navbar />
+        <Sidebar />
+        <Ordenes />
       </>
     </ProtectedRoute>
   }

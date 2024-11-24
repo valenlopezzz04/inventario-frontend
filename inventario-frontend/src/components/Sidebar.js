@@ -66,6 +66,12 @@ function Sidebar() {
         </ListItemIcon>
         <ListItemText primary="Auditorías" sx={{ color: '#fff', fontWeight: 'bold' }} />
       </ListItem>
+      <ListItem button component={Link} to="/ordenes">
+  <ListItemIcon sx={{ color: '#90CAF9' }}>
+    <InventoryIcon /> {/* Puedes cambiar el ícono si lo deseas */}
+  </ListItemIcon>
+  <ListItemText primary="Gestión de Órdenes" sx={{ color: '#fff', fontWeight: 'bold' }} />
+</ListItem>
       </List>
     </Drawer>
   );
