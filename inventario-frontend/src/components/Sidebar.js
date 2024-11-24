@@ -51,13 +51,9 @@ function Sidebar({ notificaciones }) {
           </ListItemIcon>
           <ListItemText primary="Gestión de Usuarios" sx={{ color: '#fff', fontWeight: 'bold' }} />
         </ListItem>
-        <ListItem button component={Link} to="/Notificaciones">
+        <ListItem button component={Link} to="/notificaciones">
           <ListItemIcon sx={{ color: '#90CAF9' }}>
-            <Badge
-              badgeContent={notificaciones.length > 0 ? null : null}
-              color="error"
-              variant="dot"
-            >
+            <Badge badgeContent={notificaciones.length} color="error">
               <NotificationsIcon />
             </Badge>
           </ListItemIcon>
