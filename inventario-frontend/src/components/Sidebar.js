@@ -10,6 +10,9 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 const drawerWidth = 240;
 
 function Sidebar({ notificaciones }) {
+  // Manejo seguro de `notificaciones`
+  const notificacionesCount = notificaciones?.length || 0;
+
   return (
     <Drawer
       sx={{
@@ -55,9 +58,9 @@ function Sidebar({ notificaciones }) {
         <ListItem button component={Link} to="/notificaciones">
           <ListItemIcon sx={{ color: '#90CAF9' }}>
             <Badge
-              badgeContent={notificaciones.length > 0 ? "!" : null}
+              badgeContent={notificacionesCount > 0 ? "!" : null}
               color="error"
-              variant={notificaciones.length > 0 ? "standard" : "dot"}
+              variant={notificacionesCount > 0 ? "standard" : "dot"}
             >
               <NotificationsIcon />
             </Badge>
