@@ -15,13 +15,16 @@ import ListaUsuarios from './components/Usuario/Listausuario';
 import ProtectedRoute from './components/ProtectedRoute';
 import Notificaciones from './components/Notificaciones';
 
+const backendUrl = 'https://inventario-backend-1.onrender.com'; // URL de tu backend en Render
+
 function App() {
   const [notificaciones, setNotificaciones] = useState([]);
 
+  // Cargar notificaciones desde el backend
   useEffect(() => {
     const fetchNotificaciones = async () => {
       try {
-        const response = await axios.get('https://tu-backend-url/gestion/notificaciones', {
+        const response = await axios.get(backendUrl, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         setNotificaciones(response.data);
@@ -53,6 +56,78 @@ function App() {
           }
         />
         <Route
+          path="/productos"
+          element={
+            <ProtectedRoute>
+              <>
+                <Navbar />
+                <Sidebar notificaciones={notificaciones} />
+                <GestionProductos />
+              </>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/productos/crear"
+          element={
+            <ProtectedRoute>
+              <>
+                <Navbar />
+                <Sidebar notificaciones={notificaciones} />
+                <CrearProducto />
+              </>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/productos/editar"
+          element={
+            <ProtectedRoute>
+              <>
+                <Navbar />
+                <Sidebar notificaciones={notificaciones} />
+                <EditarProducto />
+              </>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/productos/lista"
+          element={
+            <ProtectedRoute>
+              <>
+                <Navbar />
+                <Sidebar notificaciones={notificaciones} />
+                <ListaProductos />
+              </>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/usuarios"
+          element={
+            <ProtectedRoute>
+              <>
+                <Navbar />
+                <Sidebar notificaciones={notificaciones} />
+                <GestionUsuarios />
+              </>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/usuarios/lista"
+          element={
+            <ProtectedRoute>
+              <>
+                <Navbar />
+                <Sidebar notificaciones={notificaciones} />
+                <ListaUsuarios />
+              </>
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/notificaciones"
           element={
             <ProtectedRoute>
@@ -67,7 +142,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* Otras rutas */}
       </Routes>
     </Router>
   );
