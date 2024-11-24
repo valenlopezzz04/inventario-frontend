@@ -21,17 +21,17 @@ function ListaProductos() {
     const fetchProductos = async () => {
       try {
         const token = localStorage.getItem('token'); // Asegurarse de obtener el token
-        if (!token) {
-          throw new Error('No se encontró un token de autenticación');
-        }
+        console.log('Token utilizado:', token); // Para verificar si se está utilizando un token válido
+        if (!token) throw new Error('Token no encontrado en localStorage');
 
         const response = await axiosInstance.get('/gestion/productos', {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // Enviar token al backend
           },
         });
 
-        setProductos(response.data);
+        console.log('Productos recibidos:', response.data); // Mostrar los productos recibidos en consola
+        setProductos(response.data); // Guardar productos en el estado
       } catch (err) {
         console.error('Error al cargar los productos:', err.message || err);
         setError('Error al cargar los productos. Por favor, inténtalo de nuevo.');
@@ -42,20 +42,14 @@ function ListaProductos() {
   }, []);
 
   return (
-    <Box
-      sx={{
-        maxWidth: '900px',
-        margin: 'auto',
-        p: 3,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
+    <Box sx={{ padding: '20px', marginLeft: '240px' }}>
+      {/* Título */}
       <Typography variant="h4" gutterBottom>
         Gestión de Productos
       </Typography>
-      <Paper elevation={3} sx={{ p: 3, width: '100%' }}>
+
+      {/* Tabla de productos */}
+      <Paper elevation={3} sx={{ p: 3 }}>
         {error ? (
           <Typography
             variant="body1"
@@ -73,6 +67,8 @@ function ListaProductos() {
                   <TableCell><strong>Ubicación</strong></TableCell>
                   <TableCell><strong>Estado</strong></TableCell>
                   <TableCell><strong>Categoría</strong></TableCell>
+                  <TableCell><strong>Reposición Automática</strong></TableCell>
+                  <TableCell><strong>Cantidad de Reposición</strong></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -83,12 +79,22 @@ function ListaProductos() {
                     <TableCell>{producto.ubicacion_almacen}</TableCell>
                     <TableCell>{producto.estado}</TableCell>
                     <TableCell>{producto.categoria}</TableCell>
+                    <TableCell>
+                      {producto.habilitarReposicion ? 'Sí' : 'No'}
+                    </TableCell>
+                    <TableCell>
+                      {producto.habilitarReposicion
+                        ? producto.cantidad_reposicion
+                        : 'N/A'}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
         )}
+
+        {/* Mensaje si no hay productos */}
         {productos.length === 0 && !error && (
           <Typography
             variant="body1"
