@@ -2,6 +2,15 @@ import React, { useEffect, useState } from 'react';
 import axios from '../../Config/axiosConfig';
 import { Box, Grid, Paper, Typography } from '@mui/material';
 import { Inventory, Warning, Update } from '@mui/icons-material';
+import { Doughnut } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 function Dashboard() {
   const [totalProductos, setTotalProductos] = useState(0);
@@ -40,6 +49,18 @@ function Dashboard() {
     height: '150px',
   };
 
+  // Datos para la gráfica
+  const data = {
+    labels: ['Productos Activos', 'Productos sin Stock'],
+    datasets: [
+      {
+        data: [inventarioActivo, productosSinStock],
+        backgroundColor: ['#2196f3', '#f44336'],
+        hoverBackgroundColor: ['#1976d2', '#d32f2f'],
+      },
+    ],
+  };
+
   return (
     <Box sx={{ padding: '20px', marginLeft: '240px' }}> {/* Añadido para alinear con Sidebar */}
       <Typography variant="h4" gutterBottom>
@@ -75,6 +96,14 @@ function Dashboard() {
           </Paper>
         </Grid>
       </Grid>
+      
+      {/* Gráfica */}
+      <Box sx={{ marginTop: '30px', maxWidth: '600px', margin: 'auto' }}>
+        <Typography variant="h5" gutterBottom textAlign="center">
+          Distribución del Inventario
+        </Typography>
+        <Doughnut data={data} />
+      </Box>
     </Box>
   );
 }
