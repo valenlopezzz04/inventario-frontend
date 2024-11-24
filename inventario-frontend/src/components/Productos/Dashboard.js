@@ -6,7 +6,7 @@ import { Inventory, Warning, Update } from '@mui/icons-material';
 function Dashboard() {
   const [totalProductos, setTotalProductos] = useState(0);
   const [inventarioActivo, setInventarioActivo] = useState(0);
-  const [productosAgotados, setProductosAgotados] = useState(0);
+  const [productosSinStock, setProductosSinStock] = useState(0);
   const [ultimaActualizacion, setUltimaActualizacion] = useState("No disponible");
 
   useEffect(() => {
@@ -22,7 +22,7 @@ function Dashboard() {
         const productos = response.data;
         setTotalProductos(productos.length);
         setInventarioActivo(productos.filter((producto) => producto.estado === 'Disponible').length);
-        setProductosAgotados(productos.filter((producto) => producto.cantidad === 0).length);
+        setProductosSinStock(productos.filter((producto) => producto.cantidad < 4).length);
         setUltimaActualizacion(new Date().toLocaleString());
       } catch (error) {
         console.error('Error al cargar los datos del dashboard:', error.response?.data || error.message);
@@ -63,8 +63,8 @@ function Dashboard() {
         <Grid item xs={12} sm={6} md={3}>
           <Paper elevation={3} style={{ ...cardStyle, backgroundColor: '#f44336' }}>
             <Warning fontSize="large" />
-            <Typography variant="h6">Productos Agotados</Typography>
-            <Typography variant="h4">{productosAgotados}</Typography>
+            <Typography variant="h6">Productos sin Stock</Typography>
+            <Typography variant="h4">{productosSinStock}</Typography>
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>

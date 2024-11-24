@@ -41,7 +41,7 @@ function Login() {
         }}
       >
         <Typography variant="h4" gutterBottom>
-          Iniciar Sesión
+          Gestion de Inventarios
         </Typography>
         <form onSubmit={handleLogin}>
           <TextField
