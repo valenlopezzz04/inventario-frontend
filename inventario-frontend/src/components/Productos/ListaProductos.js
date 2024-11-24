@@ -13,23 +13,29 @@ import {
 } from '@mui/material';
 import Sidebar from '../Sidebar';
 
-const backendUrl = 'https://inventario-backend-1.onrender.com'; // URL del backend
-
 function ListaProductos() {
   const [productos, setProductos] = useState([]);
+  const [error, setError] = useState(''); // Para manejar errores
 
   // Cargar productos desde el backend
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/gestion/productos`, {
+        const token = localStorage.getItem('token'); // Asegurarse de obtener el token
+        if (!token) {
+          throw new Error('No se encontró un token de autenticación');
+        }
+
+        const response = await axiosInstance.get('/gestion/productos', {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${token}`,
           },
         });
+
         setProductos(response.data);
-      } catch (error) {
-        console.error('Error al cargar los productos:', error);
+      } catch (err) {
+        console.error('Error al cargar los productos:', err.message || err);
+        setError('Error al cargar los productos. Por favor, inténtalo de nuevo.');
       }
     };
 
@@ -47,31 +53,40 @@ function ListaProductos() {
           Gestión de Productos
         </Typography>
         <Paper elevation={3} sx={{ p: 3 }}>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell><strong>Nombre</strong></TableCell>
-                  <TableCell><strong>Cantidad</strong></TableCell>
-                  <TableCell><strong>Ubicación</strong></TableCell>
-                  <TableCell><strong>Estado</strong></TableCell>
-                  <TableCell><strong>Categoría</strong></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {productos.map((producto) => (
-                  <TableRow key={producto._id}>
-                    <TableCell>{producto.nombre_producto}</TableCell>
-                    <TableCell>{producto.cantidad}</TableCell>
-                    <TableCell>{producto.ubicacion_almacen}</TableCell>
-                    <TableCell>{producto.estado}</TableCell>
-                    <TableCell>{producto.categoria}</TableCell>
+          {error ? (
+            <Typography
+              variant="body1"
+              sx={{ mt: 2, textAlign: 'center', color: 'red' }}
+            >
+              {error}
+            </Typography>
+          ) : (
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell><strong>Nombre</strong></TableCell>
+                    <TableCell><strong>Cantidad</strong></TableCell>
+                    <TableCell><strong>Ubicación</strong></TableCell>
+                    <TableCell><strong>Estado</strong></TableCell>
+                    <TableCell><strong>Categoría</strong></TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {productos.length === 0 && (
+                </TableHead>
+                <TableBody>
+                  {productos.map((producto) => (
+                    <TableRow key={producto._id}>
+                      <TableCell>{producto.nombre_producto}</TableCell>
+                      <TableCell>{producto.cantidad}</TableCell>
+                      <TableCell>{producto.ubicacion_almacen}</TableCell>
+                      <TableCell>{producto.estado}</TableCell>
+                      <TableCell>{producto.categoria}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+          {productos.length === 0 && !error && (
             <Typography
               variant="body1"
               sx={{ mt: 2, textAlign: 'center', color: 'gray' }}

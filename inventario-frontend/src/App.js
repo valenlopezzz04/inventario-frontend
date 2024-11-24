@@ -95,17 +95,15 @@ function App() {
           }
         />
         <Route
-          path="/productos/lista"
-          element={
-            <ProtectedRoute>
-              <>
-                <Navbar />
-                <Sidebar notificaciones={notificaciones} />
-                <ListaProductos />
-              </>
-            </ProtectedRoute>
-          }
-        />
+  path="/productos/lista"
+  element={
+    <>
+      <Navbar />
+      <Sidebar notificaciones={notificaciones} />
+      <ListaProductos />
+    </>
+  }
+/>
         <Route
           path="/usuarios"
           element={
