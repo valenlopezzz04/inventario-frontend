@@ -35,7 +35,7 @@ const Auditorias = () => {
   }, [search, auditorias]);
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{padding: 3, marginLeft: '240px' }}>
       <Typography variant="h4" gutterBottom>
         Registros de Auditoría
       </Typography>
@@ -49,7 +49,7 @@ const Auditorias = () => {
       />
       <TableContainer component={Paper}>
         <Table>
-          <TableHead style={{ backgroundColor: "#001E3C" }}>
+          <TableHead style={{ backgroundColor: "#001E3C", padding: 3, marginLeft: '240px' }}>
             <TableRow>
               <TableCell style={{ color: "#fff", fontWeight: "bold" }}>Tipo de Evento</TableCell>
               <TableCell style={{ color: "#fff", fontWeight: "bold" }}>Detalles</TableCell>
