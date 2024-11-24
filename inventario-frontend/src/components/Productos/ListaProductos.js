@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axiosInstance from '../../Config/axiosConfig';
+import axios from 'axios';
 import {
   Box,
   Paper,
@@ -13,6 +13,8 @@ import {
 } from '@mui/material';
 import Sidebar from '../Sidebar';
 
+const backendUrl = 'https://inventario-backend-1.onrender.com'; // URL del backend
+
 function ListaProductos() {
   const [productos, setProductos] = useState([]);
 
@@ -20,7 +22,7 @@ function ListaProductos() {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const response = await axiosInstance.get('/gestion/productos', {
+        const response = await axios.get(`${backendUrl}/gestion/productos`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
